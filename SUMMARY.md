@@ -33,6 +33,8 @@
 * [Agent vault starter](guides/agent-vault-starter/README.md)
 * [The build stack](guides/build-stack/README.md)
 * [AI brain](guides/ai-brain/README.md)
+* [Agent skills, analyzed](guides/agent-skills/README.md)
+* [REA on your own app](guides/rea/README.md)
 
 ## Skills
 

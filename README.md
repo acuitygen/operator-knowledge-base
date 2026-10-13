@@ -79,6 +79,7 @@ Full playbooks that originally shipped as gated Instagram lead magnets. Complete
 - **[build-stack/](guides/build-stack/)** The ten layers a build goes through, design to deploy. My pick and the alternative per layer, exact setup commands, what each costs, the config files from my production Cloudflare deploy, a scaffold script, a doctor script, and the `/stack-map` skill.
 - **[ai-brain/](guides/ai-brain/)** One Claude project that writes in your voice, designs in your style, and knows your customer. The instructions, the brand voice and character bible prompts, the brand kit and customer templates, the memory file format for corrections, my filled examples, and a script that copies the folder.
 - **[agent-skills/](guides/agent-skills/)** Addy Osmani's 25 agent skills, analyzed. The repo, every install command the README gives for every agent, all 25 skills by lifecycle stage with their process steps, thresholds and red flags, the five to install first, and doubt-driven development in full.
+- **[rea/](guides/rea/)** REA, Reverse Engineer Anything, run on your own app first. The install, the engines, all 22 targets, the first three questions with their CLI commands, how to read the evidence and the six guided prompts, process capture, and the line the repo draws.
 
 ### [skills/](skills/) Installable skills
 

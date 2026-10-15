@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "^Bash$|^mcp__.*(send|post|add_message|reply).*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/follow-through.js"],
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -300,7 +300,7 @@ By hand, from inside the vault:
 Headless, which is what the schedule uses:
 
 ```bash
-cd ~/Documents/Vault && claude -p "/dream"
+cd ~/Documents/Vault && claude -p "/dream" < /dev/null
 ```
 
 On a schedule, with the launchd job in [templates/com.vault.dream.plist](templates/com.vault.dream.plist). Edit the two paths, then:
@@ -316,6 +316,30 @@ It fires at 03:00 local while the Mac is awake. The pass is gated and idempotent
 ### Outside Claude Code
 
 If you run agents with the Claude Agent SDK or your own harness, [templates/dream-agent-prompt.md](templates/dream-agent-prompt.md) is the same four-phase process as a standalone system prompt. Your write tool has to refuse `sources/`, validate frontmatter against the schema, and append to the log.
+
+### Security: what the unattended pass can do
+
+The dream pass reads whatever lands in `inbox/`: emails, transcripts, web clippings, chat exports. That is untrusted text, and a model that reads it can be told to do things by it (prompt injection). The pass also runs with nobody watching, and it can write to your vault.
+
+What the starter does about it:
+
+- Each skill pre-approves only the tools it needs through `allowed-tools`. `/dream` gets file tools plus two shell commands, `date` and `mv inbox/* sources/*`, and has `WebFetch` and `WebSearch` removed with `disallowed-tools`. `/query` and `/lint` get no shell beyond `date`.
+- A scheduled run has nobody to answer a permission prompt, so anything not pre-approved is denied.
+- `sources/` is protected by a written rule, not by code. If you run the agent through your own harness, make the write tool enforce it.
+
+What it does not do:
+
+- `allowed-tools` pre-approves. It does not restrict. Any tool you did not list still falls back to your own permission settings. If your settings allow broad `Bash`, or you run in an auto or bypass permission mode, the narrowing does not hold.
+- A Bash rule matches the command text Claude writes, not what the command does. `Bash(mv inbox/* sources/*)` is a guard against a stray command, not a security boundary.
+- Writing into the vault is still allowed, so an injected instruction can corrupt pages. Keep the vault in git and read `git diff` after a night you did not expect.
+
+Habits that matter more than any rule:
+
+1. Do not drop content from sources you do not trust into the inbox of a vault that runs unattended.
+2. Keep secrets, credentials and tokens out of the vault.
+3. Read `log.md` and the morning `git diff`. The log is the record of what the pass did.
+
+Tested on Claude Code 2.1.141 on macOS with a throwaway vault and an inbox note carrying an injected `touch` and `curl` instruction. The agent reported the injection and did not run either command, and its attempts at commands outside the allow list (`rm`, absolute-path `mv`) were denied. That shows the denial works. It does not show the agent will always refuse an injection. Treat the permission list as the second line of defence, not the first.
 
 > [!TIP]
 > **Test the headless command once before you load the schedule.** Run `claude -p "/dream"` from the vault folder and read the summary it prints. If it works by hand, the plist only adds the clock.
@@ -444,7 +468,7 @@ Acme signed. Mark the deal won, the client status client, and archive the projec
 | `/query` keeps citing sources instead of pages | Wiki is thin on that topic | Run `/build` a few times, or `/ingest` the relevant sources again |
 | Dream says "nothing to consolidate" every night | Nothing in `inbox/`, `wiki/`, `ops/` or `daily/` is newer than `.dream.last` | Confirm captures are landing in `inbox/`, or run `/dream force` once |
 | launchd job never fires | Mac asleep at 03:00, or paths not edited | `pmset repeat wakeorpoweron MTWRFSU 02:55:00`, and check both paths in the plist |
-| `claude -p "/dream"` exits immediately | Not logged in, or run outside the vault | Run `claude` once interactively to log in, and `cd` into the vault first |
+| `claude -p "/dream"` exits immediately, or says `Unknown command` | Not logged in, or run outside the vault | Run `claude` once interactively to log in, and `cd` into the vault first. Skills load from the working directory, so do not use `--bare` |
 | A page has placeholder text like `...` or `YYYY-MM-DD` | Template filled incompletely | `/lint` reports it. Fill or delete the section |
 
 ---

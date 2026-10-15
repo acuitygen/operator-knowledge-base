@@ -2,7 +2,7 @@
 name: ingest
 description: Take raw input (inbox entry, file, URL, transcript, pasted text) and fold it into the vault. Lands the raw material in sources/, creates or updates wiki and ops pages, cross-links, updates index.md, hot.md, and log.md. Use when the user says "ingest this", "add to the vault", "process the inbox", drops a transcript path, or pastes a URL.
 argument-hint: [source path, URL, or empty to drain inbox/]
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash, WebFetch
+allowed-tools: Read Write Edit Glob Grep WebFetch Bash(date *) Bash(mv inbox/* sources/*)
 ---
 
 # /ingest
@@ -17,7 +17,7 @@ The first operation. Read raw material, synthesize, cross-reference, file.
 
 ## Steps
 
-1. **Land the source.** Save content to `sources/YYYY/YYYY-MM-DD-slug.md` with source frontmatter per `meta/schema.md` (url, source_type, date_ingested, processed: false). Sources are immutable after this step. Inbox captures get moved here, then removed from `inbox/`.
+1. **Land the source.** Save content to `sources/YYYY/YYYY-MM-DD-slug.md` with source frontmatter per `meta/schema.md` (url, source_type, date_ingested, processed: false). Sources are immutable after this step. Inbox captures are moved with `mv inbox/<file> sources/YYYY/<slug>.md` (relative paths from the vault root, exactly this form, because the permission rule matches the command text), then given source frontmatter.
 
 2. **Read and extract entities.** People, companies, concepts, deals, clients, projects, decisions. Check `index.md` first, then Glob/Grep `wiki/` and `ops/` for existing pages.
 

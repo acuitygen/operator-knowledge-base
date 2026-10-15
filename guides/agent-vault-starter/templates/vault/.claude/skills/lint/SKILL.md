@@ -2,7 +2,7 @@
 name: lint
 description: Scan the vault for schema violations, broken wikilinks, orphan pages, placeholder text, contradictions, and stale ops state. Reports findings, optionally fixes safe issues. Use when the user says "lint the vault", "check the vault", "find orphans", or for weekly maintenance.
 argument-hint: [optional: fix | report]
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash
+allowed-tools: Read Write Edit Glob Grep Bash(date *)
 ---
 
 # /lint

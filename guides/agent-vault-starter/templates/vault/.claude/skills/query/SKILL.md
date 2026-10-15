@@ -2,7 +2,7 @@
 name: query
 description: Answer a question from the vault. Searches hot.md, index.md, MOCs, then pages, synthesizes a cited answer, optionally files reusable knowledge back. Use when the user asks "what do I know about X", "query the vault", "what is going on with Y", or any question the vault might answer.
 argument-hint: [question]
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash
+allowed-tools: Read Write Edit Glob Grep Bash(date *)
 ---
 
 # /query

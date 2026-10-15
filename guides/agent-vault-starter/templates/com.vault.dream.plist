@@ -23,7 +23,7 @@
   <array>
     <string>/bin/zsh</string>
     <string>-lc</string>
-    <string>cd /ABSOLUTE/PATH/TO/vault && claude -p "/dream"</string>
+    <string>cd /ABSOLUTE/PATH/TO/vault && claude -p "/dream" </dev/null</string>
   </array>
 
   <key>WorkingDirectory</key>

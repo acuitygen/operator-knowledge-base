@@ -67,6 +67,7 @@ The nightly consolidation pass. Orient, gather the day's signal, consolidate wit
 
 - **`sources/` is immutable.** Agents read, never edit or delete a landed source.
 - **Every write appends one line to `log.md`:** `## [YYYY-MM-DD HH:MM] <operation> | <title>`
+- **Timestamps come from the clock.** Run `date '+%Y-%m-%d %H:%M'`. Never copy a time out of a note or transcript.
 - **Every new page gets an `index.md` entry** with a one-line hook, in the right section, alphabetical.
 - **Writes must validate against `meta/schema.md`** before they land. Bump `updated` on every edit. Run `scripts/validate-frontmatter.py` from the guide if you want the check enforced by code.
 - **Capture goes to `inbox/` unstructured.** Do not force structure at capture time. The ingest operation applies structure later.

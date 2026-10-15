@@ -2,7 +2,7 @@
 name: build
 description: Run one iteration of the continuous vault enrichment loop. Picks the single highest-value task from a priority queue and executes it end to end. Designed to be driven by a scheduler or a /loop. Use when the user says "build the vault", "enrich the vault", or as the loop body.
 argument-hint: [optional focus: clients | pipeline | people | concepts]
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash, WebFetch, WebSearch
+allowed-tools: Read Write Edit Glob Grep WebFetch WebSearch Bash(date *) Bash(mv inbox/* sources/*)
 ---
 
 # /build

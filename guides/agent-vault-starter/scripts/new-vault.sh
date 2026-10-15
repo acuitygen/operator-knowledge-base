@@ -20,7 +20,10 @@ cp -R "$SRC" "$TARGET"
 mkdir -p "$TARGET/sources/$(date +%Y)"
 
 # Stamp real dates into the two root pages the agent reads first.
-sed -i '' "s/YYYY-MM-DD/$TODAY/g" "$TARGET/index.md" "$TARGET/hot.md"
+# Write to a temp file and move it back: `sed -i` differs between BSD (macOS) and GNU (Linux).
+for f in "$TARGET/index.md" "$TARGET/hot.md"; do
+  sed "s/YYYY-MM-DD/$TODAY/g" "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+done
 printf '## [%s] init | vault created from agent-vault-starter\n' "$NOW" >> "$TARGET/log.md"
 
 ( cd "$TARGET" && git init -q && git add -A && git commit -q -m "Create vault from agent-vault-starter" )

@@ -287,7 +287,7 @@ Your own chat turns outrank emails and existing pages. If you said it in convers
 
 ### Three guards
 
-A scheduled run self-skips unless there is real work. A lock file younger than 30 minutes means a pass is already running. A last dream under one hour ago means wait. Zero changed files in 24 hours means nothing to do. `/dream force` bypasses all three.
+A scheduled run self-skips unless there is real work. A lock file younger than 30 minutes means a pass is already running. A last dream under one hour ago means wait. Nothing new in `inbox/`, `wiki/`, `ops/` or `daily/` since the last pass (tracked by a `.dream.last` marker) means nothing to do. `/dream force` bypasses all three.
 
 ### Run it
 
@@ -442,7 +442,7 @@ Acme signed. Mark the deal won, the client status client, and archive the projec
 | The agent captured nothing from another project | Auto-capture rule missing or wrong path | Paste `templates/auto-capture-rule.md` into `~/.claude/CLAUDE.md`, replace the path |
 | Validator reports `first tag must equal type` | Template edited by hand | First entry under `tags:` must be the page type |
 | `/query` keeps citing sources instead of pages | Wiki is thin on that topic | Run `/build` a few times, or `/ingest` the relevant sources again |
-| Dream says "nothing to consolidate" every night | The 24-hour activity check found no changed files | Confirm captures are landing in `inbox/`, or run `/dream force` once |
+| Dream says "nothing to consolidate" every night | Nothing in `inbox/`, `wiki/`, `ops/` or `daily/` is newer than `.dream.last` | Confirm captures are landing in `inbox/`, or run `/dream force` once |
 | launchd job never fires | Mac asleep at 03:00, or paths not edited | `pmset repeat wakeorpoweron MTWRFSU 02:55:00`, and check both paths in the plist |
 | `claude -p "/dream"` exits immediately | Not logged in, or run outside the vault | Run `claude` once interactively to log in, and `cd` into the vault first |
 | A page has placeholder text like `...` or `YYYY-MM-DD` | Template filled incompletely | `/lint` reports it. Fill or delete the section |

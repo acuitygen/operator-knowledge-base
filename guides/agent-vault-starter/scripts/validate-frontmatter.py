@@ -28,10 +28,14 @@ REQUIRED = {
     "moc": [],
 }
 ENUMS = {
-    "relationship": {"client", "prospect", "partner", "vendor", "competitor", "friend", "family", "self", "brand-deal", "reference"},
     "stage": {"lead", "discovery", "proposal", "build", "retainer", "closed"},
     "confidence": {"high", "medium", "low"},
     "source_type": {"article", "transcript", "email", "note", "document", "research"},
+}
+# Per-type, exactly as meta/schema.md lists them.
+RELATIONSHIP = {
+    "person": {"client", "prospect", "partner", "vendor", "competitor", "friend", "family", "self"},
+    "company": {"client", "prospect", "partner", "vendor", "competitor", "family", "self", "reference"},
 }
 DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 SKIP_DIRS = {"meta", "inbox", "archive", ".obsidian", ".claude", ".git"}
@@ -102,6 +106,12 @@ def check(path, fm, rel):
     for f in REQUIRED[t]:
         if f not in fm:
             problems.append(f"missing {t} field: {f}")
+    rel_allowed = RELATIONSHIP.get(t)
+    v = fm.get("relationship")
+    if rel_allowed and isinstance(v, str) and v and v not in rel_allowed:
+        problems.append(f"relationship not an allowed value for {t}: {v}")
+    if t == "source" and fm.get("processed") not in (None, "true", "false"):
+        problems.append(f"processed must be true or false: {fm.get('processed')}")
     for f, allowed in ENUMS.items():
         v = fm.get(f)
         if isinstance(v, str) and v and v not in allowed:

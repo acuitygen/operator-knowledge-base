@@ -15,7 +15,7 @@ Run these checks first. If any fails and `$ARGUMENTS` is not `force`, stop and r
 
 1. **Lock.** If `.dream.lock` exists and is younger than 30 minutes, another pass is running. Stop. Otherwise write `.dream.lock` with the current timestamp and delete it in every exit path.
 2. **Interval.** If the last `dream` line in `log.md` is under one hour old, stop.
-3. **Activity.** Count: files in `inbox/`, pages under `wiki/`, `ops/`, `daily/` modified in the last 24 hours (`find . -name '*.md' -mtime -1`). If the count is zero, stop.
+3. **Activity.** If `.dream.last` does not exist, this is the first pass: continue. Otherwise run `find inbox wiki ops daily -name '*.md' -newer .dream.last`. If it prints nothing, stop. Do not count `hot.md`, `index.md`, `log.md` or anything else the pass itself rewrites, or every night looks busy.
 
 `dry-run` runs all four phases but writes nothing and prints what it would change.
 
@@ -41,13 +41,13 @@ From all of it, list three things: new facts (people, companies, deals, decision
 - When a new fact contradicts an old one, update the page to the correct state and add a one-line "Updated YYYY-MM-DD: ..." under the relevant section. Do not leave a contradiction standing.
 - Create new pages only for genuinely new entities. Start from `meta/templates/`. Pick the correct type and folder. New wiki pages start at `seedling` unless they are already well covered.
 - Operate on ops state too: a deal that moved stages, a client whose status changed, a project that progressed.
-- Every write validates against `meta/schema.md`. Bump `updated`. Never touch `sources/`.
+- Every write validates against `meta/schema.md`. Bump `updated`. Never edit or delete a file already in `sources/`.
 - Move each consumed inbox capture to `sources/YYYY/` with source frontmatter and `processed: true`.
 - Do not invent facts. Only write what the signal or the existing vault supports. If unsure, leave it out.
 
 ## Phase 4: Prune and index
 
-Rewrite `hot.md` as a tight, roughly 500-word current-state cache: what is active, who matters right now, the live deals, the open threads. Drop what is stale. Refresh `index.md` so every new or renamed page has a line. Append one line to `log.md`: `## [YYYY-MM-DD HH:MM] dream | created N, updated M, resolved K contradictions`.
+Rewrite `hot.md` as a tight, roughly 500-word current-state cache: what is active, who matters right now, the live deals, the open threads. Drop what is stale. Refresh `index.md` so every new or renamed page has a line. Append one line to `log.md`: `## [YYYY-MM-DD HH:MM] dream | created N, updated M, resolved K contradictions`. As the very last write, run `touch .dream.last`. Skip this in `dry-run`.
 
 ## Rules
 
